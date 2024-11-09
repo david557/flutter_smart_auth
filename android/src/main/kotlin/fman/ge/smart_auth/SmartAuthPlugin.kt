@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.*
 import android.content.ContentValues.TAG
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat.startIntentSenderForResult
 import com.google.android.gms.auth.api.credentials.*
@@ -238,13 +239,22 @@ class SmartAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         unregisterAllReceivers();
         pendingResult = result
         smsReceiver = SmsBroadcastReceiver()
-        mContext.registerReceiver(
-            smsReceiver,
-            IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION),
-            SmsRetriever.SEND_PERMISSION,
-            null,
-            2, // ContextCompat.RECEIVER_EXPORTED
-        )
+        if (Build.VERSION.SDK_INT >= 33) {
+            mContext.registerReceiver(
+                smsReceiver,
+                IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION),
+                SmsRetriever.SEND_PERMISSION,
+                null,
+                2, // RECEIVER_EXPORTED
+            )
+        } else {
+            mContext.registerReceiver(
+                smsReceiver,
+                IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION),
+                SmsRetriever.SEND_PERMISSION,
+                null,
+            )
+        }
         SmsRetriever.getClient(mContext).startSmsRetriever()
     }
 
@@ -262,13 +272,22 @@ class SmartAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         unregisterAllReceivers()
         pendingResult = result
         consentReceiver = ConsentBroadcastReceiver()
-        mContext.registerReceiver(
-            consentReceiver,
-            IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION),
-            SmsRetriever.SEND_PERMISSION,
-            null,
-            2, // ContextCompat.RECEIVER_EXPORTED
-        )
+        if (Build.VERSION.SDK_INT >= 33) {
+            mContext.registerReceiver(
+                consentReceiver,
+                IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION),
+                SmsRetriever.SEND_PERMISSION,
+                null,
+                2, // RECEIVER_EXPORTED
+            )
+        } else {
+            mContext.registerReceiver(
+                consentReceiver,
+                IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION),
+                SmsRetriever.SEND_PERMISSION,
+                null,
+            )
+        }
         SmsRetriever.getClient(mContext).startSmsUserConsent(call.argument("senderPhoneNumber"))
     }
 
