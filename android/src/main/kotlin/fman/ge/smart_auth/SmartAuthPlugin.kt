@@ -243,6 +243,7 @@ class SmartAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION),
             SmsRetriever.SEND_PERMISSION,
             null,
+            2, // ContextCompat.RECEIVER_EXPORTED
         )
         SmsRetriever.getClient(mContext).startSmsRetriever()
     }
@@ -266,6 +267,7 @@ class SmartAuthPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION),
             SmsRetriever.SEND_PERMISSION,
             null,
+            2, // ContextCompat.RECEIVER_EXPORTED
         )
         SmsRetriever.getClient(mContext).startSmsUserConsent(call.argument("senderPhoneNumber"))
     }
